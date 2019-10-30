@@ -13,7 +13,8 @@ import {
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-import { Facebook as FacebookIcon, Google as GoogleIcon } from 'icons';
+import api from '../../services/api';
+import { login } from '../../services/auth';
 
 const schema = {
   email: {
@@ -40,7 +41,7 @@ const useStyles = makeStyles(theme => ({
     height: '100%'
   },
   quoteContainer: {
-    [theme.breakpoints.down('md')]: {
+    [ theme.breakpoints.down('md') ]: {
       display: 'none'
     }
   },
@@ -91,7 +92,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     display: 'flex',
     alignItems: 'center',
-    [theme.breakpoints.down('md')]: {
+    [ theme.breakpoints.down('md') ]: {
       justifyContent: 'center'
     }
   },
@@ -100,7 +101,7 @@ const useStyles = makeStyles(theme => ({
     paddingRight: 100,
     paddingBottom: 125,
     flexBasis: 700,
-    [theme.breakpoints.down('sm')]: {
+    [ theme.breakpoints.down('sm') ]: {
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2)
     }
@@ -130,7 +131,7 @@ const SignIn = props => {
 
   const classes = useStyles();
 
-  const [formState, setFormState] = useState({
+  const [ formState, setFormState ] = useState({
     isValid: false,
     values: {},
     touched: {},
@@ -145,7 +146,7 @@ const SignIn = props => {
       isValid: errors ? false : true,
       errors: errors || {}
     }));
-  }, [formState.values]);
+  }, [ formState.values ]);
 
   const handleBack = () => {
     history.goBack();
@@ -158,25 +159,40 @@ const SignIn = props => {
       ...formState,
       values: {
         ...formState.values,
-        [event.target.name]:
+        [ event.target.name ]:
           event.target.type === 'checkbox'
             ? event.target.checked
             : event.target.value
       },
       touched: {
         ...formState.touched,
-        [event.target.name]: true
+        [ event.target.name ]: true
       }
     }));
   };
 
-  const handleSignIn = event => {
+  const handleSignIn = async event => {
     event.preventDefault();
-    history.push('/');
+    console.log(formState.values);
+    const { email, password } = formState.values;
+    if (!email || !password) {
+      alert('Preencha e-mail e senha para continuar!');
+
+    } else {
+      try {
+        const response = await api.post('/authenticate', { email, password });
+        login(response.data.token);
+        this.props.history.push('/dashboard');
+      } catch (err) {
+        alert('Houve um problema com o login, verifique suas credenciais. T.T');
+
+      }
+    }
+
   };
 
   const hasError = field =>
-    formState.touched[field] && formState.errors[field] ? true : false;
+    formState.touched[ field ] && formState.errors[ field ] ? true : false;
 
   return (
     <div className={classes.root}>
@@ -195,21 +211,20 @@ const SignIn = props => {
                 className={classes.quoteText}
                 variant="h1"
               >
-                Hella narwhal Cosby sweater McSweeney's, salvia kitsch before
-                they sold out High Life.
+
               </Typography>
               <div className={classes.person}>
                 <Typography
                   className={classes.name}
                   variant="body1"
                 >
-                  Takamaru Ayako
+
                 </Typography>
                 <Typography
                   className={classes.bio}
                   variant="body2"
                 >
-                  Manager at inVision
+
                 </Typography>
               </div>
             </div>
@@ -236,57 +251,17 @@ const SignIn = props => {
                   className={classes.title}
                   variant="h2"
                 >
-                  Sign in
+                  Entrar
                 </Typography>
-                <Typography
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  Sign in with social media
-                </Typography>
-                <Grid
-                  className={classes.socialButtons}
-                  container
-                  spacing={2}
-                >
-                  <Grid item>
-                    <Button
-                      color="primary"
-                      onClick={handleSignIn}
-                      size="large"
-                      variant="contained"
-                    >
-                      <FacebookIcon className={classes.socialIcon} />
-                      Login with Facebook
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      onClick={handleSignIn}
-                      size="large"
-                      variant="contained"
-                    >
-                      <GoogleIcon className={classes.socialIcon} />
-                      Login with Google
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Typography
-                  align="center"
-                  className={classes.sugestion}
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  or login with email address
-                </Typography>
+
                 <TextField
                   className={classes.textField}
                   error={hasError('email')}
                   fullWidth
                   helperText={
-                    hasError('email') ? formState.errors.email[0] : null
+                    hasError('email') ? formState.errors.email[ 0 ] : null
                   }
-                  label="Email address"
+                  label="Email"
                   name="email"
                   onChange={handleChange}
                   type="text"
@@ -298,9 +273,9 @@ const SignIn = props => {
                   error={hasError('password')}
                   fullWidth
                   helperText={
-                    hasError('password') ? formState.errors.password[0] : null
+                    hasError('password') ? formState.errors.password[ 0 ] : null
                   }
-                  label="Password"
+                  label="Senha"
                   name="password"
                   onChange={handleChange}
                   type="password"
@@ -316,19 +291,19 @@ const SignIn = props => {
                   type="submit"
                   variant="contained"
                 >
-                  Sign in now
+                  Entrar
                 </Button>
                 <Typography
                   color="textSecondary"
                   variant="body1"
                 >
-                  Don't have an account?{' '}
+                  Ainda não tem conta?{' '}
                   <Link
                     component={RouterLink}
                     to="/sign-up"
                     variant="h6"
                   >
-                    Sign up
+                    Cadastrar
                   </Link>
                 </Typography>
               </form>

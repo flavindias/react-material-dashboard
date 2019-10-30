@@ -7,6 +7,7 @@ import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
+// import Logo from process.env.PUBLIC_URL + '/images/logos/cinepe.png'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,7 +26,7 @@ const Topbar = props => {
 
   const classes = useStyles();
 
-  const [notifications] = useState([]);
+  const [ notifications ] = useState([]);
 
   return (
     <AppBar
@@ -36,7 +37,12 @@ const Topbar = props => {
         <RouterLink to="/">
           <img
             alt="Logo"
-            src="/images/logos/logo--white.svg"
+            // src="http://www.festivalcinepe.com.br/wp-content/uploads/2019/03/logocolor-site.png"
+            src={'/images/logos/cinepe.png'}
+            style={{
+              overlayColor: 'white',
+              width: '90px'
+            }}
           />
         </RouterLink>
         <div className={classes.flexGrow} />

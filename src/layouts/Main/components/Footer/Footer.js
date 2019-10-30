@@ -24,16 +24,15 @@ const Footer = props => {
         &copy;{' '}
         <Link
           component="a"
-          href="https://devias.io/"
+          href="https://festivalcinepe.com.br/"
           target="_blank"
         >
-          Devias IO
+          Cine-PE - BPE Produções Artísticas
         </Link>
         . 2019
       </Typography>
       <Typography variant="caption">
-        Created with love for the environment. By designers and developers who
-        love to work together in offices!
+        Desenvolvido por Studio Malungo e Flaviano Dias @flavindias.
       </Typography>
     </div>
   );

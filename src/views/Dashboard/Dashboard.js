@@ -3,14 +3,12 @@ import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 
 import {
-  Budget,
+  Subscriptions,
   TotalUsers,
-  TasksProgress,
-  TotalProfit,
+  TasksRevised,
+  TotalSubscribes,
   LatestSales,
-  UsersByDevice,
-  LatestProducts,
-  LatestOrders
+  UsersByDevice
 } from './components';
 
 const useStyles = makeStyles(theme => ({
@@ -35,7 +33,7 @@ const Dashboard = () => {
           xl={3}
           xs={12}
         >
-          <Budget />
+          <Subscriptions pending={250} />
         </Grid>
         <Grid
           item
@@ -44,7 +42,7 @@ const Dashboard = () => {
           xl={3}
           xs={12}
         >
-          <TotalUsers />
+          <TotalUsers total={3000} />
         </Grid>
         <Grid
           item
@@ -53,7 +51,7 @@ const Dashboard = () => {
           xl={3}
           xs={12}
         >
-          <TasksProgress />
+          <TasksRevised percent={27} />
         </Grid>
         <Grid
           item
@@ -62,7 +60,7 @@ const Dashboard = () => {
           xl={3}
           xs={12}
         >
-          <TotalProfit />
+          <TotalSubscribes total={3000} />
         </Grid>
         <Grid
           item
@@ -82,24 +80,7 @@ const Dashboard = () => {
         >
           <UsersByDevice />
         </Grid>
-        <Grid
-          item
-          lg={4}
-          md={6}
-          xl={3}
-          xs={12}
-        >
-          <LatestProducts />
-        </Grid>
-        <Grid
-          item
-          lg={8}
-          md={12}
-          xl={9}
-          xs={12}
-        >
-          <LatestOrders />
-        </Grid>
+
       </Grid>
     </div>
   );

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import MoneyIcon from '@material-ui/icons/Money';
+import SubscriptionIcon from '@material-ui/icons/Subscriptions';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Budget = props => {
+const Subscriptions = props => {
   const { className, ...rest } = props;
 
   const classes = useStyles();
@@ -62,13 +62,13 @@ const Budget = props => {
               gutterBottom
               variant="body2"
             >
-              BUDGET
+              INSC. PENDENTES
             </Typography>
-            <Typography variant="h3">$24,000</Typography>
+            <Typography variant="h3">{`${props.pending}`}</Typography>
           </Grid>
           <Grid item>
             <Avatar className={classes.avatar}>
-              <MoneyIcon className={classes.icon} />
+              <SubscriptionIcon className={classes.icon} />
             </Avatar>
           </Grid>
         </Grid>
@@ -92,8 +92,8 @@ const Budget = props => {
   );
 };
 
-Budget.propTypes = {
+Subscriptions.propTypes = {
   className: PropTypes.string
 };
 
-export default Budget;
+export default Subscriptions;

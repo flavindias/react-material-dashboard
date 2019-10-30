@@ -15,6 +15,8 @@ import {
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
+import api from '../../services/api';
+
 const schema = {
   firstName: {
     presence: { allowEmpty: false, message: 'is required' },
@@ -56,7 +58,7 @@ const useStyles = makeStyles(theme => ({
     height: '100%'
   },
   quoteContainer: {
-    [theme.breakpoints.down('md')]: {
+    [ theme.breakpoints.down('md') ]: {
       display: 'none'
     }
   },
@@ -107,7 +109,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     display: 'flex',
     alignItems: 'center',
-    [theme.breakpoints.down('md')]: {
+    [ theme.breakpoints.down('md') ]: {
       justifyContent: 'center'
     }
   },
@@ -116,7 +118,7 @@ const useStyles = makeStyles(theme => ({
     paddingRight: 100,
     paddingBottom: 125,
     flexBasis: 700,
-    [theme.breakpoints.down('sm')]: {
+    [ theme.breakpoints.down('sm') ]: {
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2)
     }
@@ -145,7 +147,8 @@ const SignUp = props => {
 
   const classes = useStyles();
 
-  const [formState, setFormState] = useState({
+
+  const [ formState, setFormState ] = useState({
     isValid: false,
     values: {},
     touched: {},
@@ -160,7 +163,7 @@ const SignUp = props => {
       isValid: errors ? false : true,
       errors: errors || {}
     }));
-  }, [formState.values]);
+  }, [ formState.values ]);
 
   const handleChange = event => {
     event.persist();
@@ -169,14 +172,14 @@ const SignUp = props => {
       ...formState,
       values: {
         ...formState.values,
-        [event.target.name]:
+        [ event.target.name ]:
           event.target.type === 'checkbox'
             ? event.target.checked
             : event.target.value
       },
       touched: {
         ...formState.touched,
-        [event.target.name]: true
+        [ event.target.name ]: true
       }
     }));
   };
@@ -185,13 +188,31 @@ const SignUp = props => {
     history.goBack();
   };
 
-  const handleSignUp = event => {
-    event.preventDefault();
-    history.push('/');
+  const handleSignUp = async e => {
+    e.preventDefault();
+    console.log(formState.values)
+    const { firstName, lastName, email, password, username } = formState.values;
+    if (!firstName || !email || !password || !firstName || !lastName || !username) {
+      alert('Preencha todos os dados para se cadastrar')
+      alert(formState.values)
+      // formState.errors = [ ...formState.errors, 'Preencha todos os dados para se cadastrar' ]
+
+    } else {
+      try {
+        await api.post('/register', { email, firstname: firstName, lastname: lastName, password, username });
+        // formState.errors = []
+        this.props.history.push('/');
+      } catch (err) {
+        alert('Ocorreu um erro ao registrar sua conta. T.T')
+        console.log(err);
+        // formState.errors = [ ...formState.errors, 'Ocorreu um erro ao registrar sua conta. T.T' ]
+
+      }
+    }
   };
 
   const hasError = field =>
-    formState.touched[field] && formState.errors[field] ? true : false;
+    formState.touched[ field ] && formState.errors[ field ] ? true : false;
 
   return (
     <div className={classes.root}>
@@ -210,21 +231,20 @@ const SignUp = props => {
                 className={classes.quoteText}
                 variant="h1"
               >
-                Hella narwhal Cosby sweater McSweeney's, salvia kitsch before
-                they sold out High Life.
+
               </Typography>
               <div className={classes.person}>
                 <Typography
                   className={classes.name}
                   variant="body1"
                 >
-                  Takamaru Ayako
+
                 </Typography>
                 <Typography
                   className={classes.bio}
                   variant="body2"
                 >
-                  Manager at inVision
+
                 </Typography>
               </div>
             </div>
@@ -251,22 +271,22 @@ const SignUp = props => {
                   className={classes.title}
                   variant="h2"
                 >
-                  Create new account
+                  Cadastrar nova conta
                 </Typography>
                 <Typography
                   color="textSecondary"
                   gutterBottom
                 >
-                  Use your email to create new account
+                  Use o seu e-mail para criar uma nova conta
                 </Typography>
                 <TextField
                   className={classes.textField}
                   error={hasError('firstName')}
                   fullWidth
                   helperText={
-                    hasError('firstName') ? formState.errors.firstName[0] : null
+                    hasError('firstName') ? formState.errors.firstName[ 0 ] : null
                   }
-                  label="First name"
+                  label="Nome"
                   name="firstName"
                   onChange={handleChange}
                   type="text"
@@ -278,9 +298,9 @@ const SignUp = props => {
                   error={hasError('lastName')}
                   fullWidth
                   helperText={
-                    hasError('lastName') ? formState.errors.lastName[0] : null
+                    hasError('lastName') ? formState.errors.lastName[ 0 ] : null
                   }
-                  label="Last name"
+                  label="Sobrenome"
                   name="lastName"
                   onChange={handleChange}
                   type="text"
@@ -292,9 +312,9 @@ const SignUp = props => {
                   error={hasError('email')}
                   fullWidth
                   helperText={
-                    hasError('email') ? formState.errors.email[0] : null
+                    hasError('email') ? formState.errors.email[ 0 ] : null
                   }
-                  label="Email address"
+                  label="Email"
                   name="email"
                   onChange={handleChange}
                   type="text"
@@ -303,12 +323,26 @@ const SignUp = props => {
                 />
                 <TextField
                   className={classes.textField}
+                  error={hasError('username')}
+                  fullWidth
+                  helperText={
+                    hasError('username') ? formState.errors.username[ 0 ] : null
+                  }
+                  label="Nome de usuário"
+                  name="username"
+                  onChange={handleChange}
+                  type="text"
+                  value={formState.values.username || ''}
+                  variant="outlined"
+                />
+                <TextField
+                  className={classes.textField}
                   error={hasError('password')}
                   fullWidth
                   helperText={
-                    hasError('password') ? formState.errors.password[0] : null
+                    hasError('password') ? formState.errors.password[ 0 ] : null
                   }
-                  label="Password"
+                  label="Senha"
                   name="password"
                   onChange={handleChange}
                   type="password"
@@ -328,7 +362,7 @@ const SignUp = props => {
                     color="textSecondary"
                     variant="body1"
                   >
-                    I have read the{' '}
+                    Li e concordo com os{' '}
                     <Link
                       color="primary"
                       component={RouterLink}
@@ -336,13 +370,13 @@ const SignUp = props => {
                       underline="always"
                       variant="h6"
                     >
-                      Terms and Conditions
+                      Termos e condições
                     </Link>
                   </Typography>
                 </div>
                 {hasError('policy') && (
                   <FormHelperText error>
-                    {formState.errors.policy[0]}
+                    {formState.errors.policy[ 0 ]}
                   </FormHelperText>
                 )}
                 <Button
@@ -354,19 +388,19 @@ const SignUp = props => {
                   type="submit"
                   variant="contained"
                 >
-                  Sign up now
+                  Cadastrar
                 </Button>
                 <Typography
                   color="textSecondary"
                   variant="body1"
                 >
-                  Have an account?{' '}
+                  Já está cadastrado?{' '}
                   <Link
                     component={RouterLink}
                     to="/sign-in"
                     variant="h6"
                   >
-                    Sign in
+                    Entrar
                   </Link>
                 </Typography>
               </form>
