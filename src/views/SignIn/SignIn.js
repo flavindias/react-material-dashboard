@@ -186,8 +186,6 @@ const SignIn = props => {
         }
       } catch (err) {
         console.log(err)
-        // alert('Houve um problema com o login, verifique suas credenciais. T.T');
-
       }
     }
 

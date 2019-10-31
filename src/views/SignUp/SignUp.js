@@ -16,6 +16,7 @@ import {
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import api from '../../services/api';
+import { login } from '../../services/auth';
 
 const schema = {
   firstName: {
@@ -199,11 +200,15 @@ const SignUp = props => {
 
     } else {
       try {
-        await api.post('/register', { email, firstname: firstName, lastname: lastName, password, username });
+        let response = await api.post('/register', { email, firstname: firstName, lastname: lastName, password, username });
+        if (response) {
+          login(response.data.token);
+          props.history.push('/');
+        }
         // formState.errors = []
-        this.props.history.push('/');
+
       } catch (err) {
-        alert('Ocorreu um erro ao registrar sua conta. T.T')
+        // alert('Ocorreu um erro ao registrar sua conta. T.T')
         console.log(err);
         // formState.errors = [ ...formState.errors, 'Ocorreu um erro ao registrar sua conta. T.T' ]
 
@@ -230,22 +235,16 @@ const SignUp = props => {
               <Typography
                 className={classes.quoteText}
                 variant="h1"
-              >
-
-              </Typography>
+              />
               <div className={classes.person}>
                 <Typography
                   className={classes.name}
                   variant="body1"
-                >
-
-                </Typography>
+                />
                 <Typography
                   className={classes.bio}
                   variant="body2"
-                >
-
-                </Typography>
+                />
               </div>
             </div>
           </div>

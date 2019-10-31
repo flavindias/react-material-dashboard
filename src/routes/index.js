@@ -23,16 +23,18 @@ import {
 
 } from '../views';
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
+const PrivateRoute = ({ layout: Layout, component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={props =>
+    render={matchProps => (
       isAuthenticated() ? (
-        <Component {...props} />
+        <Layout>
+          <Component {...matchProps} />
+        </Layout>
       ) : (
-        <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-      )
-    }
+          <Redirect to={{ pathname: '/', state: { from: matchProps.location } }} />
+        )
+    )}
   />
 );
 
@@ -42,9 +44,9 @@ const Routes = () => {
       <Redirect
         exact
         from="/"
-        to="/dashboard"
+        to="/sign-in"
       />
-      <RouteWithLayout
+      <PrivateRoute
         component={DashboardView}
         exact
         layout={MainLayout}
@@ -56,29 +58,11 @@ const Routes = () => {
         layout={MainLayout}
         path="/users"
       />
-      <RouteWithLayout
+      <PrivateRoute
         component={SubscriptionListView}
         exact
         layout={MainLayout}
         path="/subscriptions"
-      />
-      <RouteWithLayout
-        component={ProductListView}
-        exact
-        layout={MainLayout}
-        path="/products"
-      />
-      <RouteWithLayout
-        component={TypographyView}
-        exact
-        layout={MainLayout}
-        path="/typography"
-      />
-      <RouteWithLayout
-        component={IconsView}
-        exact
-        layout={MainLayout}
-        path="/icons"
       />
       <RouteWithLayout
         component={AccountView}
@@ -86,7 +70,7 @@ const Routes = () => {
         layout={MainLayout}
         path="/account"
       />
-      <RouteWithLayout
+      <PrivateRoute
         component={SettingsView}
         exact
         layout={MainLayout}
@@ -97,11 +81,6 @@ const Routes = () => {
         exact
         layout={MinimalLayout}
         path="/not-found"
-      />
-      <Redirect
-        exact
-        from="/"
-        to="/dashboard"
       />
       <RouteWithLayout
         component={SignUpView}
