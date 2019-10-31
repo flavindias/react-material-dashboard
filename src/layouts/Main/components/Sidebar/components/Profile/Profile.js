@@ -21,16 +21,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+
+
 const Profile = props => {
-  const { className, ...rest } = props;
+  const { user, className, ...rest } = props;
 
   const classes = useStyles();
 
-  const user = {
-    name: 'Shen Zhi',
-    avatar: '/images/avatars/avatar_11.png',
-    bio: 'Brain Director'
-  };
+  // const user = {
+  //   name: 'Shen Zhi',
+  //   avatar: '/images/avatars/avatar_11.png',
+  //   username: '@username'
+  // };
 
   return (
     <div
@@ -41,7 +43,7 @@ const Profile = props => {
         alt="Person"
         className={classes.avatar}
         component={RouterLink}
-        src={user.avatar}
+        src={'/images/avatars/no_avatar.jpg'}
         to="/settings"
       />
       <Typography
@@ -50,7 +52,7 @@ const Profile = props => {
       >
         {user.name}
       </Typography>
-      <Typography variant="body2">{user.bio}</Typography>
+      <Typography variant="body2">{user.username}</Typography>
     </div>
   );
 };

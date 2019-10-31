@@ -1,10 +1,12 @@
 import React from 'react';
-import { Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 import { RouteWithLayout } from '../components';
 import { Main as MainLayout, Minimal as MinimalLayout } from '../layouts';
 
-import PrivateRoute from './privateRoutes';
+// import PrivateRoute from './privateRoutes';
+import { isAuthenticated } from '../services/auth';
+
 
 import {
   Dashboard as DashboardView,
@@ -16,8 +18,23 @@ import {
   Settings as SettingsView,
   SignUp as SignUpView,
   SignIn as SignInView,
-  NotFound as NotFoundView
+  NotFound as NotFoundView,
+  SubscriptionList as SubscriptionListView
+
 } from '../views';
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      isAuthenticated() ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+      )
+    }
+  />
+);
 
 const Routes = () => {
   return (
@@ -25,7 +42,7 @@ const Routes = () => {
       <Redirect
         exact
         from="/"
-        to="/app"
+        to="/dashboard"
       />
       <RouteWithLayout
         component={DashboardView}
@@ -34,16 +51,16 @@ const Routes = () => {
         path="/dashboard"
       />
       <RouteWithLayout
-        component={DashboardView}
-        exact
-        layout={MainLayout}
-        path={'/app'}
-      />
-      <RouteWithLayout
         component={UserListView}
         exact
         layout={MainLayout}
         path="/users"
+      />
+      <RouteWithLayout
+        component={SubscriptionListView}
+        exact
+        layout={MainLayout}
+        path="/subscriptions"
       />
       <RouteWithLayout
         component={ProductListView}
@@ -76,6 +93,17 @@ const Routes = () => {
         path="/settings"
       />
       <RouteWithLayout
+        component={NotFoundView}
+        exact
+        layout={MinimalLayout}
+        path="/not-found"
+      />
+      <Redirect
+        exact
+        from="/"
+        to="/dashboard"
+      />
+      <RouteWithLayout
         component={SignUpView}
         exact
         layout={MinimalLayout}
@@ -86,12 +114,6 @@ const Routes = () => {
         exact
         layout={MinimalLayout}
         path="/sign-in"
-      />
-      <RouteWithLayout
-        component={NotFoundView}
-        exact
-        layout={MinimalLayout}
-        path="/not-found"
       />
       <Redirect to="/not-found" />
     </Switch>

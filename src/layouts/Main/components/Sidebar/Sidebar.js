@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -38,6 +38,10 @@ const Sidebar = props => {
 
   const classes = useStyles();
 
+  const [ user, setUser ] = useState([]);
+
+
+
   const pages = [
     {
       title: 'Dashboard',
@@ -68,7 +72,13 @@ const Sidebar = props => {
         {...rest}
         className={clsx(classes.root, className)}
       >
-        <Profile />
+        <Profile
+          user={{
+            name: 'Shen Zhi',
+            avatar: '/images/avatars/avatar_11.png',
+            username: '@username'
+          }}
+        />
         <Divider className={classes.divider} />
         <SidebarNav
           className={classes.nav}

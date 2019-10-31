@@ -173,18 +173,20 @@ const SignIn = props => {
 
   const handleSignIn = async event => {
     event.preventDefault();
-    console.log(formState.values);
     const { email, password } = formState.values;
     if (!email || !password) {
       alert('Preencha e-mail e senha para continuar!');
-
     } else {
       try {
         const response = await api.post('/authenticate', { email, password });
-        login(response.data.token);
-        this.props.history.push('/dashboard');
+
+        if (response) {
+          login(response.data.token);
+          props.history.push('/dashboard');
+        }
       } catch (err) {
-        alert('Houve um problema com o login, verifique suas credenciais. T.T');
+        console.log(err)
+        // alert('Houve um problema com o login, verifique suas credenciais. T.T');
 
       }
     }
@@ -210,22 +212,16 @@ const SignIn = props => {
               <Typography
                 className={classes.quoteText}
                 variant="h1"
-              >
-
-              </Typography>
+              />
               <div className={classes.person}>
                 <Typography
                   className={classes.name}
                   variant="body1"
-                >
-
-                </Typography>
+                />
                 <Typography
                   className={classes.bio}
                   variant="body2"
-                >
-
-                </Typography>
+                />
               </div>
             </div>
           </div>

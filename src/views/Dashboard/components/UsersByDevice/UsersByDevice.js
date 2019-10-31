@@ -47,7 +47,7 @@ const UsersByDevice = props => {
   const data = {
     datasets: [
       {
-        data: [ 63, 15, 22 ],
+        data: [ props.animation, props.doc, props.fiction ],
         backgroundColor: [
           theme.palette.primary.main,
           theme.palette.error.main,
@@ -58,7 +58,7 @@ const UsersByDevice = props => {
         hoverBorderColor: theme.palette.white
       }
     ],
-    labels: [ 'Curta PE', 'Curta Nacional', 'Longa' ]
+    labels: [ 'Animação', 'Documentário', 'Ficção' ]
   };
 
   const options = {
@@ -85,20 +85,20 @@ const UsersByDevice = props => {
 
   const devices = [
     {
-      title: 'Curta Nacional',
-      value: '63',
+      title: 'Animação',
+      value: props.animation,
       icon: <LaptopMacIcon />,
       color: theme.palette.primary.main
     },
     {
-      title: 'Curta PE',
-      value: '15',
+      title: 'Documentário',
+      value: props.doc,
       icon: <TabletMacIcon />,
       color: theme.palette.error.main
     },
     {
-      title: 'Longa',
-      value: '23',
+      title: 'Ficção',
+      value: props.fiction,
       icon: <PhoneIphoneIcon />,
       color: theme.palette.warning.main
     }
